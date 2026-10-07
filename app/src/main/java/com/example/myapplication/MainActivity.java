@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textViewPytanie;
     List<Pytanie> listaPytan;
     int aktualnyIndeks = 0;
+    int punkty = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 listaPytan = response.body();
                 aktualnyIndeks = 0;
+                punkty = 0;
                 wyswietlPytanie(aktualnyIndeks);
             }
 
@@ -64,14 +66,38 @@ public class MainActivity extends AppCompatActivity {
         });
 
         buttonNastepne.setOnClickListener(v -> {
-            if (listaPytan != null && !listaPytan.isEmpty()) {
-                aktualnyIndeks++;
-                if (aktualnyIndeks < listaPytan.size()) {
-                    wyswietlPytanie(aktualnyIndeks);
-                } else {
-                    Toast.makeText(MainActivity.this, "Koniec pytań", Toast.LENGTH_SHORT).show();
-                    aktualnyIndeks = listaPytan.size() - 1;
-                }
+            if (listaPytan == null || listaPytan.isEmpty() || aktualnyIndeks >= listaPytan.size()) {
+                return;
+            }
+
+            int selectedId = radioGroupPytania.getCheckedRadioButtonId();
+
+            if (selectedId == -1) {
+                Toast.makeText(MainActivity.this, "Wybierz odpowiedź!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int wybranaOpcja = -1;
+            if (selectedId == R.id.radioButton) {
+                wybranaOpcja = 0;
+            } else if (selectedId == R.id.radioButton2) {
+                wybranaOpcja = 1;
+            } else if (selectedId == R.id.radioButton3) {
+                wybranaOpcja = 2;
+            }
+
+            if (sprawdzOdpowiedz(wybranaOpcja)) {
+                punkty++;
+            }
+
+            aktualnyIndeks++;
+
+            if (aktualnyIndeks < listaPytan.size()) {
+                wyswietlPytanie(aktualnyIndeks);
+            } else {
+                Toast.makeText(MainActivity.this, "Koniec quizu! Twój wynik: " + punkty + "/" + listaPytan.size(), Toast.LENGTH_LONG).show();
+                textViewPytanie.setText("Koniec quizu!\nUzyskane punkty: " + punkty + " / " + listaPytan.size());
+                radioGroupPytania.clearCheck();
             }
         });
     }
@@ -87,5 +113,14 @@ public class MainActivity extends AppCompatActivity {
 
             radioGroupPytania.clearCheck();
         }
+    }
+
+    private boolean sprawdzOdpowiedz(int wybranaOpcja) {
+        if (listaPytan != null && aktualnyIndeks < listaPytan.size()) {
+            Pytanie aktualne = listaPytan.get(aktualnyIndeks);
+            int poprawna = aktualne.getPoprawna();
+            return poprawna == wybranaOpcja || poprawna == (wybranaOpcja + 1);
+        }
+        return false;
     }
 }
