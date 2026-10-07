@@ -11,12 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
-        >
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/textViewPytanie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tekst pytania" />
 
         <RadioGroup
+            android:id="@+id/radioGroupPytania"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <RadioButton
                 android:id="@+id/radioButton"
@@ -40,7 +46,7 @@
 
         <Button
             android:id="@+id/button"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Button" />
 
