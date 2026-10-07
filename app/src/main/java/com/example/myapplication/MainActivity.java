@@ -14,6 +14,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.List;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity {
     RadioGroup radioGroupPytania;
     RadioButton radioButtonA,radioButtonB,radioButtonC;
@@ -28,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
         radioButtonA=findViewById(R.id.radioButton);
         radioButtonA=findViewById(R.id.radioButton);
         radioButtonA=findViewById(R.id.radioButton);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://raw.githubusercontent.com/Thismaccc/retrofit_pytania_gry/main/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
 
     }
 }
